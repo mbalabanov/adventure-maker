@@ -24,7 +24,7 @@ class EntryController extends Controller
      */
     public function create()
     {
-        //
+        return view('entries.create');
     }
 
     /**
@@ -32,7 +32,20 @@ class EntryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|min:3|max:120',
+            'adventure' => 'required',
+            'description' => 'required',
+        ]);
+
+        Entry::create([
+            'user_id' => Auth::id(),
+            'title' => $request->get('title'),
+            'adventure' => $request->get('adventure'),
+            'description' => $request->get('description')
+        ]);
+
+        return to_route('entries.index');
     }
 
     /**
@@ -40,7 +53,8 @@ class EntryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $entry = Entry::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        return view('entries.show')->with('entry', $entry);
     }
 
     /**
