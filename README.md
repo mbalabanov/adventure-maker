@@ -9,10 +9,9 @@ This application uses Sail for local development.
 3. Run `npm install`
 4. Run `cp .env.example .env` to create a .env file
 5. Run `sail up -d` to start the containers
-6. Run `sail artisan key:generate`
-7. Run `sail artisan migrate` to create the database tables
-8. Run `sail artisan seed` to create a user and two entries for an adventure
-9. Run `npm run dev --watch` to compile the assets and watch for changes
+6. Run `sail artisan migrate` to create the database tables
+7. Run `sail artisan db:seed` to create a user and two entries for an adventure
+8. Run `npm run dev --watch` to compile the assets and watch for changes
 
 ## Testing
 
