@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TrashedEntryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/trashed', [TrashedEntryController::class, 'index'])->middleware('auth')->name('trashed.index');
 
 Route::resource('/entries', EntryController::class)->middleware('auth');
 

@@ -14,7 +14,6 @@ class EntryController extends Controller
      */
     public function index()
     {
-        // $entries = Auth::user()->entries()->latest('updated_at')->paginate(5);
         $entries = Entry::whereBelongsTo(Auth::user())->latest('updated_at')->paginate(5);
 
         return view('entries.index')->with('entries', $entries);
@@ -106,6 +105,6 @@ class EntryController extends Controller
 
         $entry->delete();
 
-        return to_route('entries.index')->with('success', 'Entry deleted successfully');
+        return to_route('entries.index')->with('success', 'Entry successfully moved to trash');
     }
 }

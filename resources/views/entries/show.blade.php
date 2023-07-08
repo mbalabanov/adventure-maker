@@ -20,7 +20,7 @@
                         <form action="{{ route('entries.destroy', $entry)}}" method="POST">
                             @method('DELETE')
                             @csrf
-                            <x-danger-button class="ml-2" type="submit" onclick="return confirm('Are you sure you want to delete this entry?')">Delete Entry</x-danger-button>
+                            <x-danger-button class="ml-2" type="submit" onclick="return confirm('Are you sure you want to move this entry to trash?')">Move to Trash</x-danger-button>
                         </form>
                     </div>
                     <h2 class="font-bold text-4xl">
