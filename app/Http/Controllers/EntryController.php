@@ -14,9 +14,9 @@ class EntryController extends Controller
      */
     public function index()
     {
-        $entries = Entry::where('user_id', Auth::id())->paginate(5);
+        // $entries = Auth::user()->entries()->latest('updated_at')->paginate(5);
+        $entries = Entry::whereBelongsTo(Auth::user())->latest('updated_at')->paginate(5);
 
-        // Fetch entries from Database and list them here
         return view('entries.index')->with('entries', $entries);
     }
 
@@ -39,9 +39,8 @@ class EntryController extends Controller
             'description' => 'required',
         ]);
 
-        Entry::create([
+        Auth::user()->entries()->create([
             'uuid' => Str::uuid(),
-            'user_id' => Auth::id(),
             'title' => $request->get('title'),
             'adventure' => $request->get('adventure'),
             'description' => $request->get('description')
@@ -55,7 +54,7 @@ class EntryController extends Controller
      */
     public function show(Entry $entry)
     {
-        if($entry->user_id !== Auth::id()) {
+        if(!$entry->user->is(Auth::user())) {
             abort(403);
         }
         return view('entries.show')->with('entry', $entry);
@@ -66,7 +65,7 @@ class EntryController extends Controller
      */
     public function edit(Entry $entry)
     {
-        if($entry->user_id !== Auth::id()) {
+        if(!$entry->user->is(Auth::user())) {
             abort(403);
         }
         return view('entries.edit')->with('entry', $entry);
@@ -77,7 +76,7 @@ class EntryController extends Controller
      */
     public function update(Request $request, Entry $entry)
     {
-        if($entry->user_id !== Auth::id()) {
+        if(!$entry->user->is(Auth::user())) {
             abort(403);
         }
 
@@ -101,7 +100,7 @@ class EntryController extends Controller
      */
     public function destroy(Entry $entry)
     {
-        if($entry->user_id !== Auth::id()) {
+        if(!$entry->user->is(Auth::user())) {
             abort(403);
         }
 

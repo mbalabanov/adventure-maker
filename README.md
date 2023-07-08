@@ -13,6 +13,10 @@ This application uses Sail for local development.
 7. Run `sail artisan db:seed` to create a user and two entries for an adventure
 8. Run `npm run dev --watch` to compile the assets and watch for changes
 
+You can then register a new user or login with the following credentials:
+- Email: `test@ptstest.com`
+- Password: `password`
+
 ## Testing
 
 You can run the tests with `sail artisan test`
