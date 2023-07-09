@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Entries') }}
+            {{ !$entry->trashed() ? __('Entries') : __('Trash') }}
         </h2>
     </x-slot>
 
@@ -16,20 +16,38 @@
                     <div class="flex my-4">
                         <p><strong>Adventure:</strong> {{ $entry->adventure }}</p>
                         <p class="ml-6"><strong>Unique ID:</strong> {{ $entry->uuid }}</p>
-                        <x-primary-button class="ml-auto"><a href="{{ route('entries.edit', $entry) }}">Edit Entry</a></x-primary-button>
-                        <form action="{{ route('entries.destroy', $entry)}}" method="POST">
-                            @method('DELETE')
-                            @csrf
-                            <x-danger-button class="ml-2" type="submit" onclick="return confirm('Are you sure you want to move this entry to trash?')">Move to Trash</x-danger-button>
-                        </form>
+                        @if(!$entry->trashed())
+                            <x-primary-button class="ml-auto"><a href="{{ route('entries.edit', $entry) }}">Edit Entry</a></x-primary-button>
+                            <form action="{{ route('entries.destroy', $entry)}}" method="POST">
+                                @method('DELETE')
+                                @csrf
+                                <x-danger-button class="ml-2" type="submit" onclick="return confirm('Are you sure you want to move this entry to trash?')">Move to Trash</x-danger-button>
+                            </form>
+                        @else
+                            <form action="{{ route('trashed.update', $entry)}}" method="POST" class="ml-auto">
+                                @method('PUT')
+                                @csrf
+                                <x-primary-button type="submit">Restore Entry</x-danger-button>
+                            </form>
+                            <form action="{{ route('trashed.destroy', $entry)}}" method="POST">
+                                @method('DELETE')
+                                @csrf
+                                <x-danger-button class="mr-2" type="submit" onclick="return confirm('Are you sure you want to delete this entry forever?')">Delete forever</x-danger-button>
+                            </form>
+                        @endif
                     </div>
                     <h2 class="font-bold text-4xl">
                         {{ $entry->title }}
                     </h2>
                     <p class="mt-4 whitespace-pre-wrap">{{ $entry->description }}</p>
+                    
                     <div class="flex mt-4">
-                        <p class="opacity-70"><strong>Created: </strong> {{$entry->created_at->diffForHumans()}}</p>
-                        <p class="opacity-70 ml-8"><strong>Updated: </strong> {{$entry->updated_at->diffForHumans()}}</p>
+                        @if(!$entry->trashed())
+                            <p class="opacity-70"><strong>Created: </strong> {{$entry->created_at->diffForHumans()}}</p>
+                            <p class="opacity-70 ml-8"><strong>Updated: </strong> {{$entry->updated_at->diffForHumans()}}</p>
+                        @else
+                            <p class="opacity-70"><strong>Deleted: </strong> {{$entry->deleted_at->diffForHumans()}}</p>
+                        @endif
                     </div>
                 </div>
             </div>

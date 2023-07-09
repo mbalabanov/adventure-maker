@@ -22,7 +22,11 @@
                     <span class="block mt-4 text-sm">Adventure: <strong>{{ $entry->adventure }}</strong></span>
                     <span class="block mb-4 text-sm">Unique ID: <strong>{{ $entry->uuid }}</strong></span>
                     <h2 class="font-bold text-2xl">
+                        @if(request()->routeIs('entries.index'))
                         <a href="{{ route('entries.show', $entry) }}">{{ $entry->title }}</a>
+                        @else
+                        <a href="{{ route('trashed.show', $entry) }}">{{ $entry->title }}</a>
+                        @endif
                     </h2>
                     <p class="mt-4">{{ Str::limit($entry->description, 300) }}</p>
                     <span class="block mt-4 text-sm">{{ $entry->updated_at->diffForHumans('') }}</span>

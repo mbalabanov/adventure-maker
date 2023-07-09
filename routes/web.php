@@ -30,8 +30,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/trashed', [TrashedEntryController::class, 'index'])->middleware('auth')->name('trashed.index');
-
 Route::resource('/entries', EntryController::class)->middleware('auth');
+
+Route::prefix('/trashed')->name('trashed.')->middleware('auth')->group(function () {
+    Route::get('/', [TrashedEntryController::class, 'index'])->name('index');
+    Route::get('/{entry}', [TrashedEntryController::class, 'show'])->name('show')->withTrashed();
+    Route::put('/{entry}', [TrashedEntryController::class, 'update'])->name('update')->withTrashed();
+    Route::delete('/{entry}', [TrashedEntryController::class, 'destroy'])->name('destroy')->withTrashed();
+});
 
 require __DIR__.'/auth.php';
